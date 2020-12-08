@@ -1,3 +1,4 @@
+using System;
 using Blogifier.Core;
 using Blogifier.Core.Data;
 using Blogifier.Core.Services;
@@ -7,6 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using Microsoft.Azure.KeyVault;
+using Microsoft.Azure.Services.AppAuthentication;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.AzureKeyVault;
 
 namespace Blogifier
 {
@@ -27,8 +32,13 @@ namespace Blogifier
                     {
                         context.Database.Migrate();
                     }
+
+                    AppData.Seed(context);
                 }
-                catch { }
+                catch (Exception ex)
+                {
+                    var error = ex.Message;
+                }
 
                 // load application settings from appsettings.json
                 var app = services.GetRequiredService<IAppService<AppItem>>();
@@ -40,6 +50,24 @@ namespace Blogifier
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) =>
+                {
+                    if (context.HostingEnvironment.IsProduction())
+                    {
+                        var builtConfig = config.Build();
+
+                        var azureServiceTokenProvider = new AzureServiceTokenProvider();
+
+                        var keyVaultClient = new KeyVaultClient(
+                            new KeyVaultClient.AuthenticationCallback(
+                                azureServiceTokenProvider.KeyVaultTokenCallback));
+
+                        config.AddAzureKeyVault(
+                            $"https://{builtConfig["KeyVaultName"]}.vault.azure.net/",
+                            keyVaultClient,
+                            new DefaultKeyVaultSecretManager());
+                    }
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

@@ -21,7 +21,7 @@ namespace Blogifier
             Configuration = configuration;
             Log.Logger = new LoggerConfiguration()
               .Enrich.FromLogContext()
-              .WriteTo.RollingFile("Logs/{Date}.txt", LogEventLevel.Warning)
+              .WriteTo.File("Logs/{Date}.txt", LogEventLevel.Warning)
               .CreateLogger();
         }
 

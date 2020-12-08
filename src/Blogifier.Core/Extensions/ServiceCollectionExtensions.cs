@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Microsoft.Data.SqlClient;
 
 namespace Blogifier.Core.Extensions
 {
@@ -59,7 +60,13 @@ namespace Blogifier.Core.Extensions
 
             if (section.GetValue<string>("DbProvider") == "SqlServer")
             {
-                AppSettings.DbOptions = options => options.UseSqlServer(section.GetValue<string>("ConnString"));
+                var builder = new SqlConnectionStringBuilder(section.GetValue<string>("ConnString"))
+                {
+                    UserID = configuration["Blog-DbUserId"],
+                    Password = configuration["Blog-DbPassword"]
+                };
+
+                AppSettings.DbOptions = options => options.UseSqlServer(builder.ConnectionString);
             }
             else if (section.GetValue<string>("DbProvider") == "MySql")
             {
