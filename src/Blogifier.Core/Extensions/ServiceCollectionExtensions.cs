@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
+using Microsoft.Data.SqlClient;
 
 namespace Blogifier.Core.Extensions
 {
@@ -18,8 +19,17 @@ namespace Blogifier.Core.Extensions
 			if (section.GetValue<string>("DbProvider") == "SQLite")
 				services.AddDbContext<AppDbContext>(o => o.UseSqlite(conn));
 
-			if (section.GetValue<string>("DbProvider") == "SqlServer")
-				services.AddDbContext<AppDbContext>(o => o.UseSqlServer(conn));
+            if (section.GetValue<string>("DbProvider") == "SqlServer")
+            {
+                var builder = new SqlConnectionStringBuilder(section.GetValue<string>("ConnString"))
+                {
+                    UserID = configuration["Blog-DbUserId"],
+                    Password = configuration["Blog-DbPassword"]
+                };
+
+                services.AddDbContext<AppDbContext>(o => o.UseSqlServer(builder.ConnectionString));
+
+            }
 
 			if (section.GetValue<string>("DbProvider") == "Postgres")
 				services.AddDbContext<AppDbContext>(o => o.UseNpgsql(conn));
