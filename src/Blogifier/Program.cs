@@ -39,7 +39,9 @@ namespace Blogifier
                     if (dbContext.Database.GetPendingMigrations().Any())
                         dbContext.Database.Migrate();
                 }
-                catch { }
+                catch (Exception ex) {
+                    Logger.LogError(ex.ToString());
+                }
             }
 
             host.Run();
@@ -55,10 +57,6 @@ namespace Blogifier
                          config.AddAzureKeyVault(new Uri($"https://{builtConfig["KeyVaultName"]}.vault.azure.net/"), new DefaultAzureCredential());
 
                          Logger.LogInformation($"test out: {builtConfig["Blog-DbUserId"]}");
-                     }
-                     else
-                     {
-                         Logger.LogInformation("yeah, nah brah.");
                      }
                  })
             .ConfigureLogging(logging => logging.AddAzureWebAppDiagnostics())
