@@ -42,7 +42,7 @@ namespace Blogifier
                          var builtConfig = config.Build();
                          config.AddAzureKeyVault(new Uri($"https://{builtConfig["KeyVaultName"]}.vault.azure.net/"), new DefaultAzureCredential());
 
-                         Console.Write($"test out: {builtConfig["Blog-DbUserId"]}");
+                         System.Diagnostics.Trace.TraceInformation($"test out: {builtConfig["Blog-DbUserId"]}");
                      }
                  })
                 .ConfigureWebHostDefaults(webBuilder =>

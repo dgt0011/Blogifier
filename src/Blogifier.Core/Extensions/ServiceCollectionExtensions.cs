@@ -1,15 +1,14 @@
 using Blogifier.Core.Data;
 using Blogifier.Core.Providers;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using System;
-using Microsoft.Data.SqlClient;
 
 namespace Blogifier.Core.Extensions
 {
-	public static class ServiceCollectionExtensions
+    public static class ServiceCollectionExtensions
 	{
       public static IServiceCollection AddBlogDatabase(this IServiceCollection services, IConfiguration configuration)
       {
@@ -21,7 +20,8 @@ namespace Blogifier.Core.Extensions
 
             if (section.GetValue<string>("DbProvider") == "SqlServer")
             {
-                Console.Write($"test 1 out: {configuration["Blog-DbUserId"]}");
+                System.Diagnostics.Trace.TraceInformation($"test out: {configuration["Blog-DbUserId"]}");
+
 
                 var builder = new SqlConnectionStringBuilder(section.GetValue<string>("ConnString"))
                 {           
