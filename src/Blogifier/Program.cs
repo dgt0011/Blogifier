@@ -40,7 +40,7 @@ namespace Blogifier
                      if (context.HostingEnvironment.IsProduction())
                      {
                          var builtConfig = config.Build();
-                         config.AddAzureKeyVault(new Uri($"{builtConfig["KeyVaultName"]}.vault.azure.net/"), new DefaultAzureCredential());
+                         config.AddAzureKeyVault(new Uri($"https://{builtConfig["KeyVaultName"]}.vault.azure.net/"), new DefaultAzureCredential());
                      }
                  })
                 .ConfigureWebHostDefaults(webBuilder =>
