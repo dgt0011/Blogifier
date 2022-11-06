@@ -21,8 +21,10 @@ namespace Blogifier.Core.Extensions
 
             if (section.GetValue<string>("DbProvider") == "SqlServer")
             {
+                Console.Write($"test 1 out: {configuration["Blog-DbUserId"]}");
+
                 var builder = new SqlConnectionStringBuilder(section.GetValue<string>("ConnString"))
-                {
+                {           
                     UserID = configuration["Blog-DbUserId"],
                     Password = configuration["Blog-DbPassword"]
                 };
