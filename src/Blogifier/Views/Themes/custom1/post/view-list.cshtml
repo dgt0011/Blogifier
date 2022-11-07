@@ -32,7 +32,7 @@
                         </svg>
                         <time class="post-list-date-time">@post.Published.ToFriendlyShortDateString()</time>
                     </div>
-                    @if(post.Categories != null)
+                    @if(post.Categories != null && post.Categories.Any())
                     {
                     <div class="post-list-meta-item post-list-cat">
                         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" fill="currentColor" class="bi bi-hash post-list-cat-icon" viewBox="0 0 16 16">
