@@ -71,4 +71,9 @@ namespace Blogifier.Shared
         Days30 = 4,
         Days90 = 5
     }
+
+    public enum CategoryType
+    {
+        Snippet = 1, Project = 2
+    }
 }

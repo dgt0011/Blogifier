@@ -1,0 +1,47 @@
+@using Microsoft.AspNetCore.Html
+@using Microsoft.Extensions.Localization
+@using Blogifier.Shared.Resources
+@using Blogifier.Shared
+@using System.Text
+@inject IStringLocalizer<Resource> _localizer
+
+@{
+    SnippetModel listModel = (SnippetModel)Model;
+    //string root = Url.Content("~/");
+}
+
+
+@if (listModel.Categories.Any())
+{
+    <ul class="wtree">
+        @foreach (var category in listModel.Categories)
+        {
+            @RenderCategory(category);
+        }
+    </ul>
+}
+else
+{
+    <div class="h1 text-capitalize">@_localizer["empty"]!</div>
+}
+
+@functions {
+
+    IHtmlContent RenderCategory(SnippetCategoryItem snippetCategory)
+    {
+        var listItem = $@"<li><span>{snippetCategory.Title}</span></li>";
+        var subCategories = string.Empty;
+        
+        if(snippetCategory.SubCategories.Any())
+        {
+            subCategories = "<ul>";
+
+            foreach(var subCategory in snippetCategory.SubCategories)
+            {
+                subCategories += RenderCategory(subCategory);
+            }
+            subCategories += "</ul>";
+        }
+        return Html.Raw(listItem + subCategories);
+    }
+}

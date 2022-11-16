@@ -23,10 +23,17 @@ namespace Blogifier.Controllers
 		protected readonly IThemeProvider _themeProvider;
 		protected readonly IStorageProvider _storageProvider;
         protected readonly ICompositeViewEngine _compositeViewEngine;
+        protected readonly ISnippetProvider _snippetProvider;
 
-        public HomeController(IBlogProvider blogProvider,
-            IPostProvider postProvider, IFeedProvider feedProvider, IAuthorProvider authorProvider, IThemeProvider themeProvider,
-            IStorageProvider storageProvider, ICompositeViewEngine compositeViewEngine)
+        public HomeController(
+            IBlogProvider blogProvider,
+            IPostProvider postProvider,
+            IFeedProvider feedProvider,
+            IAuthorProvider authorProvider,
+            IThemeProvider themeProvider,
+            IStorageProvider storageProvider,
+            ICompositeViewEngine compositeViewEngine,
+            ISnippetProvider snippetProvider)
 		{
 			_blogProvider = blogProvider;
 			_postProvider = postProvider;
@@ -35,11 +42,11 @@ namespace Blogifier.Controllers
 			_themeProvider = themeProvider;
 			_storageProvider = storageProvider;
             _compositeViewEngine = compositeViewEngine;
+            _snippetProvider = snippetProvider;
 		}
 
 		public async Task<IActionResult> Index(int page = 1)
 		{
-
             var model = await getBlogPosts(pager: page);
 
             //If no blogs are setup redirect to first time registration
@@ -102,6 +109,24 @@ namespace Blogifier.Controllers
         public async Task<IActionResult> Single(string slug)
         {
             return await getSingleBlogPost(slug);
+        }
+
+        [HttpGet("snippets")]
+        public async Task<IActionResult> Snippets()
+        {
+            var model = new SnippetModel
+            {
+                Blog = await _blogProvider.GetBlogItem()
+            };
+
+            var allSnippets = await _snippetProvider.GetSnippets();
+            model.Categories = GetCategoryList(allSnippets);
+
+            string viewPath = $"~/Views/Themes/{model.Blog.Theme}/Snippet.cshtml";
+
+            if (IsViewExists(viewPath))
+                return View(viewPath, model);
+            return View($"~/Views/Error.cshtml");
         }
 
         [HttpGet("error")]
@@ -258,5 +283,42 @@ namespace Blogifier.Controllers
 
             return model;
         }
-	}
+
+        private List<SnippetCategoryItem> GetCategoryList(List<TreeBranch> snippets)
+        {
+            var retVal = new List<SnippetCategoryItem>();
+            foreach(var snippet in snippets)
+            {
+                retVal.Add(CreateCategoryItemFrom(snippet));
+            }
+            return retVal;
+        }
+
+        private SnippetCategoryItem CreateCategoryItemFrom(TreeBranch branch)
+        {
+            var category = new SnippetCategoryItem();
+            category.Title = branch.Title;
+
+            category.Snippets = new List<SnippetItem>();
+
+            if(branch.Leaves != null && branch.Leaves.Any())
+            {
+                foreach(var leaf in branch.Leaves)
+                {
+                    category.Snippets.Add(new SnippetItem { Title = leaf.Title, Contents = leaf.Content });
+                }
+            }
+
+            category.SubCategories = new List<SnippetCategoryItem>();
+            if (branch.Branches != null && branch.Branches.Any())
+            {
+                foreach(var subBranch in branch.Branches)
+                {
+                    category.SubCategories.Add(CreateCategoryItemFrom(subBranch));
+                }
+            }
+
+            return category;
+        }
+    }
 }

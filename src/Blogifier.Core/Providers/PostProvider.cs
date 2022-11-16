@@ -37,12 +37,18 @@ namespace Blogifier.Core.Providers
         private readonly ICategoryProvider _categoryProvider;
         private readonly IConfiguration _configuration;
 
-        public PostProvider(AppDbContext db, ICategoryProvider categoryProvider, IConfiguration configuration)
+        private readonly ISnippetProvider _snippetProviderToDelete;
+
+        public PostProvider(AppDbContext db, ICategoryProvider categoryProvider, IConfiguration configuration, ISnippetProvider snippetProvider)
 		{
 			_db = db;
             _categoryProvider = categoryProvider;
             _configuration = configuration;
-		}
+
+            //DEBUGGERY!!
+            _snippetProviderToDelete = snippetProvider;
+
+        }
 
 		public async Task<List<Post>> GetPosts(PublishedStatus filter, PostType postType)
 		{
@@ -284,7 +290,11 @@ namespace Blogifier.Core.Providers
 
 		public async Task<IEnumerable<PostItem>> GetList(Pager pager, int author = 0, string category = "", string include = "", bool sanitize = true)
 		{
-			var skip = pager.CurrentPage * pager.ItemsPerPage - pager.ItemsPerPage;
+
+            var topLevelCategories = await _snippetProviderToDelete.GetSnippets();
+
+
+            var skip = pager.CurrentPage * pager.ItemsPerPage - pager.ItemsPerPage;
 
 			var posts = new List<Post>();
 			foreach (var p in GetPosts(include, author))
