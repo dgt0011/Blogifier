@@ -1,19 +1,16 @@
 @using Microsoft.AspNetCore.Html
 @using Microsoft.Extensions.Localization
 @using Blogifier.Shared.Resources
-@using Blogifier.Shared
-@using System.Text
 @inject IStringLocalizer<Resource> _localizer
 
 @{
     SnippetModel listModel = (SnippetModel)Model;
-    //string root = Url.Content("~/");
 }
 
 
 @if (listModel.Categories.Any())
 {
-    <ul class="wtree">
+    <ul>
         @foreach (var category in listModel.Categories)
         {
             @RenderCategory(category);
@@ -29,12 +26,31 @@ else
 
     IHtmlContent RenderCategory(SnippetCategoryItem snippetCategory)
     {
-        var listItem = $@"<li><span>{snippetCategory.Title}</span></li>";
+        var snippetsUrl = Url.Content("~/snippets");
+        var listItem = snippetCategory.SubCategories.Any() ?
+            $"<li data-type=\"category\" class=\"category collapsed\" data-bs-toggle=\"collapse\" data-bs-target=\"#category{snippetCategory.Id}\"><span>{snippetCategory.Title}</span></li>" :
+            $"<li data-type=\"category-empty\" data-bs-toggle=\"collapse\" data-bs-target=\"#category{snippetCategory.Id}\"><span>{snippetCategory.Title}</span></li>";
+
+        var categorySnippets = string.Empty;
+
+        if (snippetCategory.Snippets.Any())
+        {
+            //categorySnippets = snippetCategory.Snippets.Aggregate(categorySnippets, (current, snippet) => current + $"<li data-type=\"snippet\"><span>{snippet.Title}</span></li>");
+            // <a class="post-nav-item text-start" href="~/posts/@_model.Older.Slug" aria-label="@_localizer["Previous post"]">
+            //<span class="post-nav-text">@_localizer["Previous post"]</span>
+            //<h4 class="post-nav-title">@_model.Older.Title</h4>
+            // </a>
+            foreach (var snippet in snippetCategory.Snippets)
+            {
+                categorySnippets += $"<li data-type=\"snippet\"><a href=\"{snippetsUrl}/{snippet.Id}\"><span>{snippet.Title}</span></a></li>";
+            }
+        }
+
         var subCategories = string.Empty;
         
         if(snippetCategory.SubCategories.Any())
         {
-            subCategories = "<ul>";
+            subCategories = $"<ul class=\"sub-category collapse\" id=\"category{snippetCategory.Id}\">";
 
             foreach(var subCategory in snippetCategory.SubCategories)
             {
@@ -42,6 +58,8 @@ else
             }
             subCategories += "</ul>";
         }
-        return Html.Raw(listItem + subCategories);
+        return Html.Raw(listItem + categorySnippets + subCategories);
     }
 }
+
+

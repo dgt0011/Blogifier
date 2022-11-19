@@ -36,7 +36,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "items", "items", "{D2E9C8BA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C2B6983F-8277-4560-94D8-C32D26FBFCC6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blogifier.Core.Tests", "Blogifier.Core.Tests\Blogifier.Core.Tests.csproj", "{BBA38D61-D1F1-4A4E-87EA-DCBAD4998A1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blogifier.Core.Tests", "Blogifier.Core.Tests\Blogifier.Core.Tests.csproj", "{BBA38D61-D1F1-4A4E-87EA-DCBAD4998A1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

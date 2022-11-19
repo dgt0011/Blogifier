@@ -74,6 +74,12 @@ namespace Blogifier.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AddCategory(string parentId, string title)
+        {
+            return Redirect("~/home");
+        }
+
+        [HttpPost]
 		public async Task<IActionResult> Search(string term, int page = 1)
 		{
             
@@ -128,6 +134,27 @@ namespace Blogifier.Controllers
                 return View(viewPath, model);
             return View($"~/Views/Error.cshtml");
         }
+
+        [HttpGet("snippets/{id}")]
+        public async Task<IActionResult> Snippets(int id)
+        {
+            var model = new SnippetModel
+            {
+                Blog = await _blogProvider.GetBlogItem()
+            };
+
+            var allSnippets = await _snippetProvider.GetSnippets();
+            model.Categories = GetCategoryList(allSnippets);
+
+            model.SelectedSnippet = await _snippetProvider.GetSnippet(id);
+
+            string viewPath = $"~/Views/Themes/{model.Blog.Theme}/Snippet.cshtml";
+
+            if (IsViewExists(viewPath))
+                return View(viewPath, model);
+            return View($"~/Views/Error.cshtml");
+        }
+
 
         [HttpGet("error")]
         public async Task<IActionResult> Error()
@@ -296,16 +323,18 @@ namespace Blogifier.Controllers
 
         private SnippetCategoryItem CreateCategoryItemFrom(TreeBranch branch)
         {
-            var category = new SnippetCategoryItem();
-            category.Title = branch.Title;
-
-            category.Snippets = new List<SnippetItem>();
+            var category = new SnippetCategoryItem
+            {
+                Id = branch.Id,
+                Title = branch.Title,
+                Snippets = new List<SnippetItem>()
+            };
 
             if(branch.Leaves != null && branch.Leaves.Any())
             {
                 foreach(var leaf in branch.Leaves)
                 {
-                    category.Snippets.Add(new SnippetItem { Title = leaf.Title, Contents = leaf.Content });
+                    category.Snippets.Add(new SnippetItem {Id = leaf.Id, Title = leaf.Title, Contents = leaf.Content });
                 }
             }
 

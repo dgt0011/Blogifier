@@ -11,6 +11,8 @@ namespace Blogifier.Core.Providers
     public interface ISnippetProvider
     {
         Task<List<TreeBranch>> GetSnippets();
+
+        Task<string> GetSnippet(int id);
     }
 
     public class SnippetProvider : ISnippetProvider
@@ -46,6 +48,19 @@ namespace Blogifier.Core.Providers
             }
 
             return retVal;
+        }
+
+        public async Task<string> GetSnippet(int id)
+        {
+            var snippetLeaf = await _db.TreeLeaves.AsNoTracking()
+                .Where(a => a.CategoryType == CategoryType.Snippet && a.Id == id).FirstOrDefaultAsync();
+
+            if (snippetLeaf != null)
+            {
+                return snippetLeaf.Content;
+            }
+
+            return string.Empty;
         }
 
         private List<TreeBranch> FindSubBranchesFor(int parentBranchId, List<TreeBranch> allBranches)

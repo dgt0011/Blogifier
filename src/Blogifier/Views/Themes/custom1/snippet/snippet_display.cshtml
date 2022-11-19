@@ -1,0 +1,14 @@
+@using Microsoft.AspNetCore.Html
+@using Microsoft.Extensions.Localization
+@using Blogifier.Shared.Resources
+@inject IStringLocalizer<Resource> _localizer
+
+@{
+    SnippetModel listModel = (SnippetModel)Model;
+}
+
+@if (!string.IsNullOrEmpty(listModel.SelectedSnippet))
+{
+    @Html.Raw(listModel.SelectedSnippet)
+}
+

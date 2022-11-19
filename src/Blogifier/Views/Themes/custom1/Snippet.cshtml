@@ -4,7 +4,17 @@
 }
 
 <main class="container">
-    <partial name="snippet/category_list.cshtml" />
-
-
+    <div class="container">
+        <div class="row category-header">
+            <partial name="snippet/snippet_header.cshtml"/>
+        </div>
+        <div class="row">
+            <div class="col-md-5">
+                <partial name="snippet/category_list.cshtml"/>
+            </div>
+            <div class="col-md-7">
+                <partial name="snippet/snippet_display.cshtml"/>
+            </div>
+        </div>
+    </div>
 </main>
