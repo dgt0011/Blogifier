@@ -76,8 +76,33 @@ namespace Blogifier.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCategory(string parentId, string title)
         {
-            return Redirect("~/home");
+            if (int.TryParse(parentId, out var categoryId))
+            {
+                if (categoryId > 0)
+                {
+                    await _snippetProvider.AddSnippetCategory(categoryId, title);
+                }
+                else
+                {
+                    await _snippetProvider.AddSnippetCategory(null, title);
+                }
+            }
+
+            var model = new SnippetModel
+            {
+                Blog = await _blogProvider.GetBlogItem()
+            };
+
+            var allSnippets = await _snippetProvider.GetSnippets();
+            model.Categories = GetCategoryList(allSnippets);
+
+            string viewPath = $"~/Views/Themes/{model.Blog.Theme}/Snippet.cshtml";
+
+            if (IsViewExists(viewPath))
+                return View(viewPath, model);
+            return View($"~/Views/Error.cshtml");
         }
+
 
         [HttpPost]
 		public async Task<IActionResult> Search(string term, int page = 1)

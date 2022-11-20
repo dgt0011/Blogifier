@@ -51,12 +51,26 @@ li[data-type="category-empty"] {
 }
 
 .category-header {
-  background-color: #ced4da;
+  background-color: #F8F8F8;
   padding: 0.25em;
+  border-radius: 4px;
 }
 
 .popup-input {
-  width: 90%;
   margin: auto;
   display: block;
 }
+
+.headspace {
+  margin-top: 0.5em;
+}
+
+.right-margin {
+  border-right-color: #F8F8F8;
+  border-right-width: 1px;
+}
+
+  .modal-edit {
+    margin: 1em;
+    border: 1 px solid #006ee0;
+  }

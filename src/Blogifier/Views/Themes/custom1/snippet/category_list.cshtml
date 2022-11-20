@@ -35,11 +35,6 @@ else
 
         if (snippetCategory.Snippets.Any())
         {
-            //categorySnippets = snippetCategory.Snippets.Aggregate(categorySnippets, (current, snippet) => current + $"<li data-type=\"snippet\"><span>{snippet.Title}</span></li>");
-            // <a class="post-nav-item text-start" href="~/posts/@_model.Older.Slug" aria-label="@_localizer["Previous post"]">
-            //<span class="post-nav-text">@_localizer["Previous post"]</span>
-            //<h4 class="post-nav-title">@_model.Older.Title</h4>
-            // </a>
             foreach (var snippet in snippetCategory.Snippets)
             {
                 categorySnippets += $"<li data-type=\"snippet\"><a href=\"{snippetsUrl}/{snippet.Id}\"><span>{snippet.Title}</span></a></li>";

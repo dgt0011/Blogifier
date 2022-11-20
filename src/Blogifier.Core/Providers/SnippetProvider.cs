@@ -1,3 +1,4 @@
+using System;
 using Blogifier.Core.Data;
 using Blogifier.Shared;
 using Blogifier.Shared.Domain;
@@ -13,6 +14,8 @@ namespace Blogifier.Core.Providers
         Task<List<TreeBranch>> GetSnippets();
 
         Task<string> GetSnippet(int id);
+
+        Task<bool> AddSnippetCategory(int? parentCategoryId, string categoryTitle);
     }
 
     public class SnippetProvider : ISnippetProvider
@@ -61,6 +64,13 @@ namespace Blogifier.Core.Providers
             }
 
             return string.Empty;
+        }
+
+        public async Task<bool> AddSnippetCategory(int? parentCategoryId, string categoryTitle)
+        {
+            var newTreeBranch = new TreeBranch { CategoryType = CategoryType.Snippet, Title = categoryTitle, ParentBranchId = parentCategoryId };
+            await _db.TreeBranches.AddAsync(newTreeBranch);
+            return await _db.SaveChangesAsync() > 0;
         }
 
         private List<TreeBranch> FindSubBranchesFor(int parentBranchId, List<TreeBranch> allBranches)

@@ -7,6 +7,8 @@
     SnippetModel listModel = (SnippetModel)Model;
 }
 
+@*@model SnippetModel
+*@
 
 <div class="col-md-7">
     <button class="header-nav-button d-none d-md-block" title="Add Category" type="button" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
@@ -20,43 +22,15 @@
 <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
     <div class="modal-dialog mt-5">
         <div class="modal-content">
-            <form id="categoryForm" asp-controller="Home" asp-action="AddCategory" method="post">
+            <form id="categoryForm" asp-controller="Home" asp-action="AddCategory" method="post" class="modal-edit">
                 @RenderCategories(listModel.Categories)
                 <input type="text" id="categoryFormTitleInput" name="title" class="form-control form-control-lg popup-input" placeholder="Category Name ..." autocomplete="off" autofocus>
-                <input type="submit" name="submit_button" value="Submit">
+                <input type="submit" name="submit_button" class="btn btn-primary headspace" value="Save">
             </form>
         </div>
     </div>
 </div>
 @functions {
-
-    //List<SelectListItem> GetCategories(IEnumerable<SnippetCategoryItem> categories)
-    //{
-    //    var retVal = new List<SelectListItem>();
-
-    //    var sortedListOfCategories = new SortedList<string, SnippetCategoryItem>();
-    //    if (categories != null && categories.Any())
-    //    {
-    //        var listOfCategories = new List<SnippetCategoryItem>();
-
-    //        foreach (var category in categories)
-    //        {
-    //            listOfCategories.AddRange(GetSubCategories(category));
-    //        }
-
-    //        foreach (var subCategory in listOfCategories)
-    //        {
-    //            sortedListOfCategories.Add(subCategory.Title, subCategory);
-    //        }
-
-    //        foreach (var sortedCategory in sortedListOfCategories.Values)
-    //        {
-    //            var item = new SelectListItem { Value = sortedCategory.Id.ToString(), Text = sortedCategory.Title };
-    //            retVal.Add(item);
-    //        }
-    //    }
-    //    return retVal;
-    //}
 
     IHtmlContent RenderCategories(IEnumerable<SnippetCategoryItem> categories)
     {
@@ -76,7 +50,7 @@
             }
         }
 
-        var select = "<select title=\"Category\" asp-for=\"parentId\" class=\"form-select form-select-lg mb-3 form-control-lg popup-input\">";
+        var select = "<select title=\"Category\" asp-for=\"parentId\" name=\"parentId\" class=\"form-select form-select-lg mb-3 form-control-lg popup-input\">";
         select += "<option value=\"-1\">Select a parent category</option>";
 
         if (sortedListOfCategories.Any())

@@ -10,6 +10,6 @@ namespace Blogifier.Shared
         public IEnumerable<SnippetCategoryItem> Categories { get; set; }
 
         public string SelectedSnippet { get; set; }
-
+        
     }
 }

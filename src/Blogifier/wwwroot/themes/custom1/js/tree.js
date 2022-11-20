@@ -27,7 +27,7 @@ function restoreCategoryState(element) {
   var activeItem = localStorage.getItem(element.id);
   if (activeItem) {
     if (activeItem === "0") {
-      element.classList.removeClass('show');
+      element.classList.remove('show');
     } else {
       element.classList.add('show');
 
