@@ -103,6 +103,29 @@ namespace Blogifier.Controllers
             return View($"~/Views/Error.cshtml");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(string categoryId, string title)
+        {
+            if (int.TryParse(categoryId, out var catId))
+            {
+                await _snippetProvider.ModifySnippetCategory(catId, title);
+            }
+
+            var model = new SnippetModel
+            {
+                Blog = await _blogProvider.GetBlogItem()
+            };
+
+            var allSnippets = await _snippetProvider.GetSnippets();
+            model.Categories = GetCategoryList(allSnippets);
+
+            string viewPath = $"~/Views/Themes/{model.Blog.Theme}/Snippet.cshtml";
+
+            if (IsViewExists(viewPath))
+                return View(viewPath, model);
+            return View($"~/Views/Error.cshtml");
+        }
+
 
         [HttpPost]
 		public async Task<IActionResult> Search(string term, int page = 1)

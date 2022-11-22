@@ -37,8 +37,6 @@ namespace Blogifier.Core.Providers
         private readonly ICategoryProvider _categoryProvider;
         private readonly IConfiguration _configuration;
 
-        private readonly ISnippetProvider _snippetProviderToDelete;
-
         public PostProvider(AppDbContext db, ICategoryProvider categoryProvider, IConfiguration configuration, ISnippetProvider snippetProvider)
 		{
 			_db = db;
