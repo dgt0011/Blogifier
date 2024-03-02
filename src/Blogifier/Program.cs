@@ -3,13 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 using System.Linq;
-using Microsoft.Extensions.Configuration;
-using System;
-using Azure.Identity;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.AzureAppServices;
 namespace Blogifier
 {
     public class Program
@@ -53,24 +50,20 @@ namespace Blogifier
                  {
                      if (context.HostingEnvironment.IsProduction())
                      {
-                         var builtConfig = config.Build();
-                         config.AddAzureKeyVault(new Uri($"https://{builtConfig["KeyVaultName"]}.vault.azure.net/"), new DefaultAzureCredential());
-
-                         Logger.LogInformation($"test out: {builtConfig["Blog-DbUserId"]}");
                      }
                  })
-            .ConfigureLogging(logging => logging.AddAzureWebAppDiagnostics())
-            .ConfigureServices(serviceCollection => serviceCollection
-                .Configure<AzureFileLoggerOptions>(options =>
-                {
-                    options.FileName = "azure-diagnostics-";
-                    options.FileSizeLimit = 50 * 1024;
-                    options.RetainedFileCountLimit = 5;
-                }).Configure<AzureBlobLoggerOptions>(options =>
-                {
-                    options.BlobName = "log.txt";
-                })
-                )
+            //.ConfigureLogging(logging => logging.AddAzureWebAppDiagnostics())
+            //.ConfigureServices(serviceCollection => serviceCollection
+            //    .Configure<AzureFileLoggerOptions>(options =>
+            //    {
+            //        options.FileName = "azure-diagnostics-";
+            //        options.FileSizeLimit = 50 * 1024;
+            //        options.RetainedFileCountLimit = 5;
+            //    }).Configure<AzureBlobLoggerOptions>(options =>
+            //    {
+            //        options.BlobName = "log.txt";
+            //    })
+             //   )
                 .ConfigureWebHostDefaults(webBuilder =>
                   {
                       webBuilder

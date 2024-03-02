@@ -26,7 +26,7 @@ namespace Blogifier
 
         public void ConfigureServices(IServiceCollection services)
         {
-            Log.Warning("Start configure services");
+            Log.Information("Start configure services");
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
 
@@ -44,11 +44,10 @@ namespace Blogifier
 
             services.AddBlogProviders();
 
-            
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            Log.Warning("Done configure services");
+            Log.Information("Done with configure services");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
