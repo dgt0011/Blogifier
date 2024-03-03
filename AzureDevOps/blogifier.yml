@@ -2,9 +2,7 @@ trigger:
   branches:
     include:
     - master
-resources:
-  repositories:
-  - repository: self
+
 variables:
 - name: tag
   value: '$(Build.BuildId)'
