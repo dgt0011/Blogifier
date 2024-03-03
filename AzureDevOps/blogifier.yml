@@ -27,7 +27,7 @@ stages:
         repository: $(DOCKER_REPOSITORY_NAME)
     - task: ECRPushImage@1
       inputs:
-        awsCredentials: 'aws-aideploy'
+        awsCredentials: 'DGT0011-AWS'
         regionName: $(AWS_REGION)
         imageSource: 'imagename'
         sourceImageName: $(DOCKER_REPOSITORY_NAME)
