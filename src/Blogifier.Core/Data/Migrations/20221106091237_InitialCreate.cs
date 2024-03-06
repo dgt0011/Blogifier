@@ -140,7 +140,7 @@ namespace Blogifier.Core.Migrations
                     Title = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
                     Slug = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
                     Description = table.Column<string>(type: "varchar(450)", maxLength: 450, nullable: false),
-                    Content = table.Column<string>(type: "varchar(max)", nullable: false),
+                    Content = table.Column<string>(type: "text", nullable: false),
                     Cover = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
                     PostViews = table.Column<int>(type: "integer", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
