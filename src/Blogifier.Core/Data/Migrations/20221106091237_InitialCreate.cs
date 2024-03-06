@@ -28,7 +28,7 @@ namespace Blogifier.Core.Migrations
                     AnalyticsListType = table.Column<int>(type: "integer", nullable: false),
                     AnalyticsPeriod = table.Column<int>(type: "integer", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()")
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -44,7 +44,7 @@ namespace Blogifier.Core.Migrations
                     Content = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
                     Description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()")
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
@@ -64,7 +64,7 @@ namespace Blogifier.Core.Migrations
                     Avatar = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true),
                     IsAdmin = table.Column<bool>(type: "bool", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
                     BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -92,7 +92,7 @@ namespace Blogifier.Core.Migrations
                     ToName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
                     Enabled = table.Column<bool>(type: "bool", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
                     BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -116,7 +116,7 @@ namespace Blogifier.Core.Migrations
                     Country = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true),
                     Region = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
                     BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -148,7 +148,7 @@ namespace Blogifier.Core.Migrations
                     Selected = table.Column<bool>(type: "bool", nullable: false),
                     Published = table.Column<DateTime>(type: "timestamp", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()"),
                     BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
@@ -176,7 +176,7 @@ namespace Blogifier.Core.Migrations
                     PostId = table.Column<int>(type: "integer", nullable: false),
                     Success = table.Column<bool>(type: "bool", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()")
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "now()")
                 },
                 constraints: table =>
                 {
