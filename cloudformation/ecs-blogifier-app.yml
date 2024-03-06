@@ -94,6 +94,10 @@ Resources:
           FromPort: 443 
           ToPort: 443
           CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 5432 
+          ToPort: 5432
+          CidrIp: 192.168.0.0/16
 
   PublicLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -247,6 +251,15 @@ Resources:
             Resource: [
               !Join [ "", [ "arn:aws:s3:::", "dgt-static-images-website" ] ]
             ]
+      - PolicyName: secretAccess
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+          - Effect: Allow
+            Action:
+              - secretsmanager:GetSecretValue
+            Resource:
+            - !Sub "arn:aws:secretsmanager:${AWS::Region}:${AWS::AccountId}:secret:postgresdb-blog-user-password-??????"
 
   ECSTaskDefinition:
     Type: AWS::ECS::TaskDefinition
@@ -300,9 +313,9 @@ Resources:
           SecurityGroups: 
             - !Ref 'FargateContainerSecurityGroup'
           Subnets:
-            - !ImportValue subnet-pub-a
-            - !ImportValue subnet-pub-b
-            - !ImportValue subnet-pub-c
+            - !ImportValue subnet-private-a
+            - !ImportValue subnet-private-b
+            - !ImportValue subnet-private-c
       TaskDefinition: !Ref ECSTaskDefinition
       LoadBalancers:
         - ContainerName: !Ref 'ServiceName'

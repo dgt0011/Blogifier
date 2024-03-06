@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -13,21 +14,21 @@ namespace Blogifier.Core.Migrations
                 name: "Blogs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
-                    Theme = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: true),
-                    IncludeFeatured = table.Column<bool>(type: "bit", nullable: false),
-                    ItemsPerPage = table.Column<int>(type: "int", nullable: false),
-                    Cover = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: true),
-                    Logo = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: true),
-                    HeaderScript = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    FooterScript = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    AnalyticsListType = table.Column<int>(type: "int", nullable: false),
-                    AnalyticsPeriod = table.Column<int>(type: "int", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Title = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
+                    Description = table.Column<string>(type: "varchar(450)", maxLength: 450, nullable: true),
+                    Theme = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
+                    IncludeFeatured = table.Column<bool>(type: "bool", nullable: false),
+                    ItemsPerPage = table.Column<int>(type: "integer", nullable: false),
+                    Cover = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
+                    Logo = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
+                    HeaderScript = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true),
+                    FooterScript = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true),
+                    AnalyticsListType = table.Column<int>(type: "integer", nullable: false),
+                    AnalyticsPeriod = table.Column<int>(type: "integer", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -38,12 +39,12 @@ namespace Blogifier.Core.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Content = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    Description = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -54,17 +55,17 @@ namespace Blogifier.Core.Migrations
                 name: "Authors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    DisplayName = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Bio = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
-                    Avatar = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: true),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    BlogId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Email = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    Password = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    DisplayName = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    Bio = table.Column<string>(type: "varchar(2000)", maxLength: 2000, nullable: true),
+                    Avatar = table.Column<string>(type: "varchar(400)", maxLength: 400, nullable: true),
+                    IsAdmin = table.Column<bool>(type: "bool", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -80,19 +81,19 @@ namespace Blogifier.Core.Migrations
                 name: "MailSettings",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Host = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Port = table.Column<int>(type: "int", nullable: false),
-                    UserEmail = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    UserPassword = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    FromName = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    FromEmail = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    ToName = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: false),
-                    Enabled = table.Column<bool>(type: "bit", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    BlogId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Host = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    Port = table.Column<int>(type: "integer", nullable: false),
+                    UserEmail = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    UserPassword = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    FromName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    FromEmail = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    ToName = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: false),
+                    Enabled = table.Column<bool>(type: "bool", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -108,15 +109,15 @@ namespace Blogifier.Core.Migrations
                 name: "Subscribers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Ip = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: true),
-                    Country = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: true),
-                    Region = table.Column<string>(type: "nvarchar(120)", maxLength: 120, nullable: true),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    BlogId = table.Column<int>(type: "int", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Email = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    Ip = table.Column<string>(type: "varchar(80)", maxLength: 80, nullable: true),
+                    Country = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true),
+                    Region = table.Column<string>(type: "varchar(120)", maxLength: 120, nullable: true),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -132,23 +133,23 @@ namespace Blogifier.Core.Migrations
                 name: "Posts",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    AuthorId = table.Column<int>(type: "int", nullable: false),
-                    PostType = table.Column<int>(type: "int", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Slug = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: false),
-                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cover = table.Column<string>(type: "nvarchar(160)", maxLength: 160, nullable: true),
-                    PostViews = table.Column<int>(type: "int", nullable: false),
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    AuthorId = table.Column<int>(type: "integer", nullable: false),
+                    PostType = table.Column<int>(type: "integer", nullable: false),
+                    Title = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    Slug = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: false),
+                    Description = table.Column<string>(type: "varchar(450)", maxLength: 450, nullable: false),
+                    Content = table.Column<string>(type: "varchar(max)", nullable: false),
+                    Cover = table.Column<string>(type: "varchar(160)", maxLength: 160, nullable: true),
+                    PostViews = table.Column<int>(type: "integer", nullable: false),
                     Rating = table.Column<double>(type: "float", nullable: false),
-                    IsFeatured = table.Column<bool>(type: "bit", nullable: false),
-                    Selected = table.Column<bool>(type: "bit", nullable: false),
-                    Published = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()"),
-                    BlogId = table.Column<int>(type: "int", nullable: true)
+                    IsFeatured = table.Column<bool>(type: "bool", nullable: false),
+                    Selected = table.Column<bool>(type: "bool", nullable: false),
+                    Published = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()"),
+                    BlogId = table.Column<int>(type: "integer", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -170,12 +171,12 @@ namespace Blogifier.Core.Migrations
                 name: "Newsletters",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    Success = table.Column<bool>(type: "bit", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "getdate()")
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    Success = table.Column<bool>(type: "bool", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "timestamp", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "timestamp", nullable: false, defaultValueSql: "getdate()")
                 },
                 constraints: table =>
                 {
@@ -192,8 +193,8 @@ namespace Blogifier.Core.Migrations
                 name: "PostCategories",
                 columns: table => new
                 {
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    PostId = table.Column<int>(type: "integer", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
