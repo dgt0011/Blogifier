@@ -30,7 +30,7 @@ stages:
         imageSource: 'imagename'
         sourceImageName: $(DOCKER_REPOSITORY_NAME)
         sourceImageTag: $(Build.BuildId)
-        pushTag: latest
+        pushTag: latest-blogifier
         repositoryName: $(DOCKER_REPOSITORY_NAME)
         logRequest: true
         logResponse: true
