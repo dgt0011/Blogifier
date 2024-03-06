@@ -14,7 +14,7 @@ Parameters:
     Description: The name of the ECR repository where the docker image is stored
   ECRTag:
     Type: String
-    Default: latest
+    Default: latest-blogifier
     Description: The tag of the docker image to use
   ContainerPort:
     Type: Number
@@ -80,22 +80,20 @@ Resources:
       GroupName: !Sub '${ServiceName}-sg'
       GroupDescription: Access to the Fargate containers
       VpcId: !ImportValue 'vpc-id'                                                              #change this
-
-  EcsSecurityGroupIngressFromPublicALB:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      Description: Ingress from the public ALB
-      GroupId: !Ref FargateContainerSecurityGroup
-      IpProtocol: -1
-      SourceSecurityGroupId: !Ref PublicLoadBalancerSG
-
-  EcsSecurityGroupIngressFromSelf:
-    Type: AWS::EC2::SecurityGroupIngress
-    Properties:
-      Description: Ingress from other containers in the same security group
-      GroupId: !Ref FargateContainerSecurityGroup
-      IpProtocol: -1
-      SourceSecurityGroupId: !Ref FargateContainerSecurityGroup
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref PublicLoadBalancerSG
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 443 
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
 
   PublicLoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
@@ -123,7 +121,7 @@ Resources:
       Name: !Sub '${ServiceName}-tg'
       Port: !Ref 'ContainerPort'
       Protocol: HTTP
-      UnhealthyThresholdCount: 1
+      UnhealthyThresholdCount: 2
       VpcId: !ImportValue 'vpc-id'                                                              #change this
 
   HttpLoadBalancerListener:
@@ -247,7 +245,7 @@ Resources:
             Action:
               - s3:ListBucket
             Resource: [
-              !Join [ "", [ "arn:aws:s3:::", !Ref S3BucketName ] ]
+              !Join [ "", [ "arn:aws:s3:::", "dgt-static-images-website" ] ]
             ]
 
   ECSTaskDefinition:
@@ -265,7 +263,7 @@ Resources:
         - Name: !Ref 'ServiceName'
           Cpu: !Ref 'ContainerCpu'
           Memory: !Ref 'ContainerMemory'
-          ReadOnlyRootFilesystem: true
+          ReadonlyRootFilesystem: true
           Image:
             !Join [
               '.',
@@ -298,7 +296,7 @@ Resources:
       DesiredCount: !Ref DesiredCount
       NetworkConfiguration:
         AwsvpcConfiguration:
-          AssignPublicIp: DISABLED
+          AssignPublicIp: ENABLED
           SecurityGroups: 
             - !Ref 'FargateContainerSecurityGroup'
           Subnets:

@@ -21,6 +21,7 @@ RUN dotnet publish "src/Blogifier/Blogifier.csproj" -c Release -o /app/publish /
 
 # Create the final runtime image
 FROM base AS final
+ENV COMPlus_EnableDiagnostics=0
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Blogifier.dll"]
