@@ -1,11 +1,13 @@
+using Amazon.SecretsManager;
+using Amazon.SecretsManager.Model;
 using Blogifier.Core.Data;
 using Blogifier.Core.Providers;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
-using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Blogifier.Core.Extensions
 {
@@ -21,9 +23,6 @@ namespace Blogifier.Core.Extensions
 
             if (section.GetValue<string>("DbProvider") == "SqlServer")
             {
-                System.Diagnostics.Trace.TraceInformation($"test out: {configuration["Blog-DbUserId"]}");
-
-
                 var builder = new SqlConnectionStringBuilder(section.GetValue<string>("ConnString"))
                 {           
                     UserID = configuration["Blog-DbUserId"],
@@ -31,11 +30,13 @@ namespace Blogifier.Core.Extensions
                 };
 
                 services.AddDbContext<AppDbContext>(o => o.UseSqlServer(builder.ConnectionString));
-
             }
 
-			if (section.GetValue<string>("DbProvider") == "Postgres")
-				services.AddDbContext<AppDbContext>(o => o.UseNpgsql(conn));
+            if (section.GetValue<string>("DbProvider") == "Postgres")
+            {
+                conn = GetSecureAwsConnectionString(configuration);
+                services.AddDbContext<AppDbContext>(o => o.UseNpgsql(conn));
+            }
 
 			//TODO: this is not tested
 			if (section.GetValue<string>("DbProvider") == "MySql")
@@ -69,5 +70,59 @@ namespace Blogifier.Core.Extensions
 
 			return services;
 		}
-	}
+
+        private static string GetSecureAwsConnectionString(IConfiguration configuration)
+        {
+            var section = configuration.GetSection("DBCredentials");
+            var awsSecretName = section.GetValue<string>("AWS-SecretName");
+
+            if (awsSecretName != null)
+            {
+                var secretsManager = new AmazonSecretsManagerClient();  // the assumption is that this is running in a context that permits access to the required AWS Secrets MAnager secret
+
+                var result = secretsManager.GetSecretValueAsync(
+                    new GetSecretValueRequest { SecretId = awsSecretName }
+                ).Result;
+
+                if (result != null)
+                {
+                    try
+                    {
+                        var secretJObject = JObject.Parse(result.SecretString);
+
+                        if (secretJObject["host"] != null &&
+                            secretJObject["dbInstanceIdentifier"] != null &&
+                            secretJObject["port"] != null &&
+                            secretJObject["dbname"] != null &&
+                            secretJObject["username"] != null &&
+                            secretJObject["password"] != null)
+                        {
+                            var host = secretJObject["host"]!.ToString();
+                            var port = secretJObject["port"]!.ToString();
+                            var userName = secretJObject["username"]!.ToString();
+                            var passWord = secretJObject["password"]!.ToString();
+                            var database = secretJObject["dbname"]!.ToString();
+
+                            return $"Host={host};Port={port};Username={userName};Password={passWord};Database={database};Timeout=14;Pooling=true;MinPoolSize=100;MaxPoolSize=200;";
+                        }
+
+                        //TODO: Log this somewhere
+                        return string.Empty;
+
+                    }
+                    catch (JsonReaderException)
+                    {
+                        //TODO: Log this somewhere
+                        return string.Empty;
+                    }
+                }
+
+                //TODO: Log this somewhere
+                return string.Empty;
+            }
+
+            //TODO: Log this somewhere
+            return string.Empty;
+        }
+    }
 }
