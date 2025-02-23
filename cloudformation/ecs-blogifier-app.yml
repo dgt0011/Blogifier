@@ -322,6 +322,13 @@ Resources:
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref TargetGroup
 
+  AssociationWithWaf:
+    DependsOn: ECSService
+    Type: AWS::WAFv2::WebACLAssociation
+    Properties:
+      ResourceArn: !Ref PublicLoadBalancer
+      WebACLArn: !ImportValue WebACLArn
+
 Outputs:
   ClusterName:
     Description: The name of the ECS cluster
